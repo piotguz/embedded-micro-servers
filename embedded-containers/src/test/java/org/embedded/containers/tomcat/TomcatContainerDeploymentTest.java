@@ -62,7 +62,19 @@ public class TomcatContainerDeploymentTest {
 	@Test
 	public void deployRestService() throws EmbeddedServletContainerException {
 		PlainTomcat container = new ResteasyOnTomcat();
+		container.configure(TomcatServerParams.SERVER_PORT, "8080");
 		
 		container.start();
+		
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/rest/hello");
+
+		Response response = target.request().get();
+
+		String entity = response.readEntity(String.class);
+
+		assertEquals(entity, "Well hello from reateasy!");
+
+		container.stop();
 	}
 }
