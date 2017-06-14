@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 import org.embedded.containers.EmbeddedServletContainerException;
 import org.testng.annotations.Test;
-
+//http://www.artificialworlds.net/blog/2015/02/05/programmatic-equivalents-of-web-xml-sections-for-tomcat/
 public class TomcatContainerDeploymentTest {
 	@Test
 	public void deploySimpleServlet()
