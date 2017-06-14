@@ -1,13 +1,21 @@
 package org.embedded.containers.tomcat;
 
+import static org.embedded.containers.tomcat.TomcatServerParams.SERVER_PORT;
+import static org.embedded.containers.tomcat.TomcatServerParams.SERVER_PORT_LBOUND;
+import static org.embedded.containers.tomcat.TomcatServerParams.SERVER_PORT_UBOUND;
+
+import java.io.File;
+
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
+import org.apache.catalina.WebResourceRoot;
+import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.catalina.webresources.DirResourceSet;
+import org.apache.catalina.webresources.StandardRoot;
 import org.embedded.containers.EmbeddedServletContainer;
 import org.embedded.containers.EmbeddedServletContainerException;
 import org.embedded.containers.ServerConfigurationParams;
-
-import static org.embedded.containers.tomcat.TomcatServerParams.*;
 
 /**
  * Implementation of embedded tomcat container
@@ -16,11 +24,10 @@ import static org.embedded.containers.tomcat.TomcatServerParams.*;
  *
  */
 public class TomcatContainer extends EmbeddedServletContainer {
-	Tomcat tomcat;
+	Tomcat tomcat =  new Tomcat();
 
 	@Override
 	public void start() throws EmbeddedServletContainerException {
-		tomcat = new Tomcat();
 
 		int from = Integer.parseInt(configuration.getProperty(SERVER_PORT_LBOUND.paramName, "30000"));
 		int to = Integer.parseInt(configuration.getProperty(SERVER_PORT_UBOUND.paramName, "40000"));
@@ -86,6 +93,20 @@ public class TomcatContainer extends EmbeddedServletContainer {
 
 	public Tomcat getTomcat() {
 		return tomcat;
+	}
+
+	public void deployWebApp(String webappDirLocation) throws EmbeddedServletContainerException {
+		try {			
+			StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
+			
+			File additionWebInfClasses = new File("target/classes");
+			WebResourceRoot resources = new StandardRoot(ctx);
+			resources.addPreResources(
+					new DirResourceSet(resources, "/WEB-INF/classes", additionWebInfClasses.getAbsolutePath(), "/"));
+			ctx.setResources(resources);
+		} catch (Exception e) {
+			throw new EmbeddedServletContainerException(e);
+		}
 	}
 
 }
