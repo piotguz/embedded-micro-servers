@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="EmbeddedServletContainers tests">
+	<test name="tomcat-unit-tests">
+		<packages>
+			<package name="org.embedded.containers.tomcat.*"></package>
+		</packages>
+	</test>
+</suite>
