@@ -23,7 +23,7 @@ import org.embedded.containers.ServerConfigurationParams;
  * @author gup8wz
  *
  */
-public class TomcatContainer extends EmbeddedServletContainer {
+public class PlainTomcat extends EmbeddedServletContainer {
 	Tomcat tomcat =  new Tomcat();
 
 	@Override
@@ -96,7 +96,7 @@ public class TomcatContainer extends EmbeddedServletContainer {
 	}
 
 	public void deployWebApp(String webappDirLocation) throws EmbeddedServletContainerException {
-		try {			
+		try {
 			StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
 			
 			File additionWebInfClasses = new File("target/classes");

@@ -17,7 +17,7 @@ public class TomcatContainerDeploymentTest {
 	@Test
 	public void deploySimpleServlet()
 			throws EmbeddedServletContainerException, ServletException, MalformedURLException {
-		TomcatContainer container = new TomcatContainer();
+		PlainTomcat container = new PlainTomcat();
 
 		container.configure(TomcatServerParams.SERVER_PORT, "8080");
 
@@ -39,7 +39,7 @@ public class TomcatContainerDeploymentTest {
 	
 	@Test
 	public void deployExternalService() throws EmbeddedServletContainerException, ServletException {
-		TomcatContainer container = new TomcatContainer();
+		PlainTomcat container = new PlainTomcat();
 
 		container.configure(TomcatServerParams.SERVER_PORT, "8080");
 
@@ -61,7 +61,7 @@ public class TomcatContainerDeploymentTest {
 	
 	@Test
 	public void deployRestService() throws EmbeddedServletContainerException {
-		TomcatContainer container = new ResteasyOnTomcat();
+		PlainTomcat container = new ResteasyOnTomcat();
 		
 		container.start();
 	}

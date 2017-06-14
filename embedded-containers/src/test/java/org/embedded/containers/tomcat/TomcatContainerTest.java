@@ -14,20 +14,20 @@ public class TomcatContainerTest {
 
 	@Test
 	public void startTest() throws EmbeddedServletContainerException {
-		TomcatContainer container = new TomcatContainer();
+		PlainTomcat container = new PlainTomcat();
 		container.start();
 		container.stop();
 	}
 
 	@Test
 	public void stopNotStartedTest() throws EmbeddedServletContainerException {
-		TomcatContainer container = new TomcatContainer();
+		PlainTomcat container = new PlainTomcat();
 		container.stop();
 	}
 
 	@Test
 	public void startWithCustomPort() throws EmbeddedServletContainerException {
-		TomcatContainer container = new TomcatContainer();
+		PlainTomcat container = new PlainTomcat();
 		container.configure(TomcatServerParams.SERVER_PORT, "30000");
 
 		container.start();
@@ -39,12 +39,12 @@ public class TomcatContainerTest {
 
 	@Test(expectedExceptionsMessageRegExp = "Port .* is already in use!", expectedExceptions = EmbeddedServletContainerException.class)
 	public void failWithLockedPort() throws EmbeddedServletContainerException {
-		TomcatContainer container1 = new TomcatContainer();
+		PlainTomcat container1 = new PlainTomcat();
 		container1.configure(TomcatServerParams.SERVER_PORT, "8080");
 
 		container1.start();
 
-		TomcatContainer container2 = new TomcatContainer();
+		PlainTomcat container2 = new PlainTomcat();
 		container2.configure(TomcatServerParams.SERVER_PORT, "8080");
 
 		container2.start();
@@ -55,7 +55,7 @@ public class TomcatContainerTest {
 
 	@Test(expectedExceptionsMessageRegExp = "No free ports found.*", expectedExceptions = EmbeddedServletContainerException.class)
 	public void failWithNoFreePorts() throws EmbeddedServletContainerException {
-		TomcatContainer container = new TomcatContainer();
+		PlainTomcat container = new PlainTomcat();
 		container.configure(TomcatServerParams.SERVER_PORT_LBOUND, "10");
 		container.configure(TomcatServerParams.SERVER_PORT_UBOUND, "8");
 
@@ -65,7 +65,7 @@ public class TomcatContainerTest {
 
 	@Test(expectedExceptionsMessageRegExp = ".*is not applicable for.*", expectedExceptions = EmbeddedServletContainerException.class)
 	public void failOnConfiguration() throws EmbeddedServletContainerException {
-		TomcatContainer container = new TomcatContainer();
+		PlainTomcat container = new PlainTomcat();
 		container.configure(WrongEnum.WRONG_PARAM, "whatever");
 
 	}
