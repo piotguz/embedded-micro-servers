@@ -5,6 +5,11 @@ import java.net.ServerSocket;
 import java.util.Properties;
 
 public abstract class EmbeddedServletContainer {
+
+	public static final String SERVER_PORT="server.port";
+	public static final String SERVER_PORT_UBOUND="server.port.ubound";
+	public static final String SERVER_PORT_LBOUND="server.port.lbound";
+	public static final String SERVER_AUTO_DEPLOY="server.auto.deploy";
 	
 	protected int serverPort;
 	protected Properties configuration = new Properties();
@@ -16,7 +21,9 @@ public abstract class EmbeddedServletContainer {
 
 	public abstract void stop() throws EmbeddedServletContainerException;
 	
-	public abstract void configure(ServerConfigurationParams key, String value) throws EmbeddedServletContainerException;
+	public void configure(String key, String value) throws EmbeddedServletContainerException {
+		configuration.setProperty(key, value);
+	}
 
 	public int nextFreePort(int from, int to) throws EmbeddedServletContainerException {
 
@@ -36,4 +43,10 @@ public abstract class EmbeddedServletContainer {
 			return false;
 		}
 	}
+
+	public int getServerPort() {
+		return serverPort;
+	}
+	
+	
 }

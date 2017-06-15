@@ -1,9 +1,5 @@
 package org.embedded.containers.tomcat;
 
-import static org.embedded.containers.tomcat.TomcatServerParams.SERVER_PORT;
-import static org.embedded.containers.tomcat.TomcatServerParams.SERVER_PORT_LBOUND;
-import static org.embedded.containers.tomcat.TomcatServerParams.SERVER_PORT_UBOUND;
-
 import java.io.File;
 
 import org.apache.catalina.LifecycleException;
@@ -15,7 +11,6 @@ import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
 import org.embedded.containers.EmbeddedServletContainer;
 import org.embedded.containers.EmbeddedServletContainerException;
-import org.embedded.containers.ServerConfigurationParams;
 
 /**
  * Implementation of embedded tomcat container
@@ -29,11 +24,11 @@ public class PlainTomcat extends EmbeddedServletContainer {
 	@Override
 	public void start() throws EmbeddedServletContainerException {
 
-		int from = Integer.parseInt(configuration.getProperty(SERVER_PORT_LBOUND.paramName, "30000"));
-		int to = Integer.parseInt(configuration.getProperty(SERVER_PORT_UBOUND.paramName, "40000"));
+		int from = Integer.parseInt(configuration.getProperty(SERVER_PORT_LBOUND, "30000"));
+		int to = Integer.parseInt(configuration.getProperty(SERVER_PORT_UBOUND, "40000"));
 
-		if (configuration.containsKey(SERVER_PORT.paramName)) {
-			serverPort = Integer.parseInt(configuration.getProperty(SERVER_PORT.paramName));
+		if (configuration.containsKey(SERVER_PORT)) {
+			serverPort = Integer.parseInt(configuration.getProperty(SERVER_PORT));
 			if (!isPortAvailable(serverPort))
 				throw new EmbeddedServletContainerException("Port %d is already in use!", serverPort);
 		} else {
@@ -77,22 +72,6 @@ public class PlainTomcat extends EmbeddedServletContainer {
 			}
 		}
 
-	}
-
-	@Override
-	public void configure(ServerConfigurationParams key, String value) throws EmbeddedServletContainerException {
-		if (key instanceof TomcatServerParams) {
-			TomcatServerParams param = (TomcatServerParams) key;
-			configuration.setProperty(param.getParamName(), value);
-		} else {
-			throw new EmbeddedServletContainerException("Enum %s is not applicable for %s!",
-					key.getClass().getSimpleName(), getClass().getName());
-		}
-
-	}
-
-	public Tomcat getTomcat() {
-		return tomcat;
 	}
 
 	public void deployWebApp(String webappDirLocation) throws EmbeddedServletContainerException {
